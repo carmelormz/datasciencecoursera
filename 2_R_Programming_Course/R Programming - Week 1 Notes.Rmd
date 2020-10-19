@@ -1,0 +1,120 @@
+---
+title: "R Programming - Week 1"
+author: "Carmelo Ramirez"
+date: "10/9/2020"
+output: pdf_document
+---
+
+## Data Types
+
+### Factors
+
+Factors are used to represent *categorical* data. Factors can be _unordered_ or _ordered_. One can think of a factor as an integer vector where each integer has a _label_.
+
+- Factors are treated specially by modeling function like _lm()_ and _glm()_
+- Using factors with labels is better than using integers because factors are self-describing; having a variable that has values "Male" and "Female" is better than a variable that has values 1 and 2.
+
+### Missing Values
+
+Missing values are denoted by _NA_ or _NaN_ for undefined mathematical operations.
+
+- _is.na()_ is used to test objects if they are _NA_
+- _is.nan()_ is used to test for _NaN_
+- _NA_ values have a class also, so there are integer _NA_, character _NA_, etc.
+- A _NaN_ value is also _NA_ but the converse is not true.
+
+### Data Frames
+
+Data frames are used to store tabular data.
+
+- They are represented as special type of list where every element of the list has to have the same length.
+- Each element of the list can be thought of as a column and the length of each element of the list is the number of rows.
+- Unlike matrices, data frames can store different classes of objects in each column (just like lists); matrices must have every element be the same class.
+- Data frames also have a special attribute called _row.names_
+- Data frames are usually created by calling _read.table()_, _read.csv()_, _data.frame()_
+- Can be converted to a matrix by calling _data.matrix()_
+
+### Names
+
+R objects can also have names, which is very useful for writing readable code and self-describing objects.
+
+```{R}
+x <- 1:3
+names(x)
+names(x) <- c("foo", "bar", "norf")
+x
+names(x)
+```
+
+List can also have names
+```{R}
+x <- list(a = 1, b = 2, c = 3)
+x
+```
+
+and matrices
+```{R}
+m <- matrix(1:4, nrow = 2, ncol = 2)
+dimnames(m) <- list(c("a", "b"), c("c", "d"))
+m
+```
+
+## Reading Tabular Data
+
+There are few principal functions reading data into R:
+- _read.table_, _read.csv_, for reading tabular data
+- _readLines_, for reading lines of a text file
+- _source_, for reading in R codes files (inverse of _dump_)
+- _dget_, for reading in R code files (inverse of _dput_)
+- _load_, for reading in saved workspaces
+- _unserialize_, for reading single R objects in binary form
+
+There are analogous functions for writing data to files:
+- _write.table_
+- _writeLines_
+- _dump_
+- _dput_
+- _save_
+- _serialize_
+
+### Interfaces to the Outside World
+Data read in using _connection_ interfaces. Connections can be made to files (most common) or to other more exotic things.
+- _file_, opens a connection to a file
+- _gzfile_, opens a connection to a file compressed with gzip
+- _bzfile_, opens a connection to a file compressed with bzip2
+- _url_, opens a connection to a webpage
+
+### File Connections
+
+```{R}
+str(file)
+```
+
+- _description_ is the name of the file
+- _open_ is a code indicating
+  - "r" read only
+  - "w" writing (and initializing a new file)
+  - "a" appending
+  - "rb". "wb", "ab" reading, writing, or appending in binary mode (Windows)
+  
+## Subsetting
+
+There are a number of operators that can be used to extract subsets of R objects:
+
+- [] always returns an object of the same class as the original; can be used to select more than one element (there is one exception)
+- [[]] is used to extract elements of a list or a data frame; it can only be used to extract a single element and the class of the returned object will not necessarily be a list or a data frame
+- $ is used to extract elements of a list or data frame by name; semantics are similar to hat of [[]]
+
+## Vectorized Operations
+
+Many operations in R are vectorized (element-wise) making code more efficient, concise, and easier to read.
+
+```{R}
+x <- 1:4; y <- 6:9
+x + y
+x > 2
+x >= 2
+y == 8
+x * y
+x / y
+```

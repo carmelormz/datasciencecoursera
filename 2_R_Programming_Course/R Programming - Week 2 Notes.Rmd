@@ -1,0 +1,171 @@
+---
+title: "R Programming - Week 2"
+author: "Carmelo Ramirez"
+date: "23/9/2020"
+output: pdf_document
+---
+
+## Control Structures
+
+### If Condition
+```{R}
+if(<condition>) {
+  ## Do Something
+} else {
+  ## Do something else
+}
+
+if(<condition1>) {
+  # Do something else
+} else if(<condition2>) {
+  ## do something different
+} else {
+  ## do something different
+}
+```
+
+### For Loop
+
+_for_ loops take an iterator variable and assign it successive value from a sequence or vector. For loops are most commonly used for iterating over the elements of an object (list, vector, etc).
+
+```{R}
+for(i in 1:10) {
+  print(i)
+}
+
+x <- c("a", "b", "c", "d")
+
+for(i in 1:4) {
+  print(x[i])
+}
+
+for(i in seq_along(x)) {
+  print(x[i])
+}
+
+for(letter in x){
+  print(letter)
+}
+
+for(i in 1:4) print(x[i])
+```
+
+### White Loop
+
+_while_ loop begin by testing a condition. If it is true, then they execute the loop body. Once the loop body is executed, the condition is tested again, and so forth.
+
+```{R}
+count <- 0
+while(count < 10) {
+  print(count)
+  count <- count + 1
+}
+```
+
+### Control Structures - Repeat, Next, Break
+
+_repeat_ initiates an infinite loop; these are not commonly used in statistical applications but they do have their uses. The only way to exit a _repeat_ loops is to call _break_
+
+```{R}
+x0 <- 1
+tol <- 1e-8
+
+repeat {
+  x1 <- computeEstimate()
+  if(abs(x1 - x0) < tol) {
+    break;
+  } else {
+    x0 <- x1
+  }
+}
+```
+### Next, Return
+
+_next_ is used to skip an iteration of a loop
+
+```{R}
+for(i in 1:100) {
+  if(i <= 20) {
+    ## Skip the first 20 iterations
+    next
+  }
+  
+  ## Do something
+}
+```
+
+_returns_ signals that a function should exit and return a given value
+
+## Functions
+
+Functions are created using the _function()_ directive and are stored as R objects just like anything else. In particular, they are R objects of class "function".
+
+Functions in R are _first class objects_, which means that they can be treated much like any other R object. Importantly,
+- Functions can be passed as arguments to other functions.
+- Functions can be nested, so that you can define a function inside of another function. The return value of a function is the last expression in the function body to be evaluated.
+- _formals_ function returns a list of all the formal arguments of a function.
+
+Function arguments can be also _partially_ matched, which is useful for interactive work. The order of operations when given an argument is:
+1. Check for exact match for a named argument
+2. Check for a partial match
+3. Check for a positional match
+
+```{R}
+add2 <- function(x, y) {
+  x + y
+}
+
+
+above10 <- function(x) {
+  use <- x > 10
+  x[use]
+}
+
+above <- function(x, n = 10){
+  use <- x > n
+  x[use]
+}
+
+columnMean <- function(x, removeNA = TRUE) {
+  nc <- ncol(x) ## Number of columns in matrix/data frame
+  means <- numeric(nc) ## Numeric vector to be returned
+  for(i in 1:nc) {
+    means[i] <- mean(x[, i], na.rm = removeNA)
+  }
+  means
+}
+```
+
+## Dates and Times
+
+R has developed a special representation of dates and times
+- Dates are represented by the _Date_ class
+- Times are represented by the POSIXct or the POSIClt class
+- Dates are storied internally as the number of days since 1970-01-01
+- Times are stored internally as the number of seconds since 1970-01-01
+
+Dates are represented by the Date class and can be coerced from a character string using the _as.Date()_ function
+
+```{R}
+x <- as.Date("1970-01-01")
+x
+unclass(x)
+unclass(as.Date("1970-01-02"))
+```
+
+Times are represented using the POSIXct or the POSIXlt class
+- _POSIXct_ is just a very large integer under the hood; it use a useful class when you want to store times in something like a data frame.
+- _POSIXlt_ is a list underneath and it stores a bunch of other useful information like the day of the week, day of the year, month, day of the month.
+
+There are a number of generic functions that work on dates and times:
+- _weekdays_: give the day of the week
+- _months_: give the month name
+- _quarters_: give the quarter number ("Q1", "Q2", "Q3", "Q4")
+
+```{R}
+x <- Sys.time()
+x
+p <- as.POSIXlt(x)
+names(unclass(p))
+p$sec
+```

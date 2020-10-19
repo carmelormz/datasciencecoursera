@@ -1,0 +1,102 @@
+---
+title: "R Programming - Week 3 Notes"
+author: "Carmelo Ramirez"
+date: "25/9/2020"
+output: pdf_document
+---
+
+## Loop Functions
+
+Writing _for_, _while_ loops is useful when programming but not particularly easy when working interactively on the command line. There are some functions which implement looping to make life easier.
+
+- _lapply_: Loop over a list and evaluate a function on each element.
+- _sapply_: Same as _lapply_ but try to simplify the result.
+- _apply_: Apply a function over the margins of an array.
+- _tapply_: Apply a function over a subsets of a vector.
+_ _mapply_: Multivariate version of _lapply_.
+
+### lappy
+
+_lapply_ take three arguments: (1) a list x; (2) a function (or the name of a function) FUN; (3) other arguments via its ... argument. If _x_ is not a list, it will be coerced to a list using _as.list_
+
+```{R}
+x <- list(a = 1:5, b = rnorm(10))
+lapply(x, mean)
+```
+
+### sapply
+
+_sapply_ will try to simplify the result of _lapply_ if possible.
+
+- If the result is a list where every element is length 1, then a vector is returned.
+- If the result is a list where every element is a vector of the same length (> 1), a matrix is returned.
+- If it can't figure thins out, a list is returned.
+
+```{R}
+x <- list(a = 1:5, b = rnorm(10))
+sapply(x, mean)
+```
+
+### apply
+
+_apply_ is used to evaluate a function (often an anonymous one) over the margins (1 for rows, 2 for columns) of an array.
+
+- It is most often used to apply a function to the rows or columns of a matrix.
+- It can be used with general arrays, e.g. taking the average of an array of matrices.
+- It is not really faster than writing a loop, but it works in one line.
+
+```{R}
+x <- matrix(rnorm(200), 20, 10)
+apply(x, 2, mean)
+
+apply(x, 1, sum)
+```
+
+For sums and means of matrix dimensions, we have some shortcuts:
+- _rowSums_ = apply(x, 1, sum)
+- _rowMeans_ = apply(x, 1, mean)
+- _colSums_ = apply(x, 2, sum)
+- _colMeans_ = apply
+
+```{R}
+a <- array(rnorm(2 * 2 * 10), c(2, 2, 10))
+apply(a, c(1, 2), mean)
+
+## Results in the same
+rowMeans(a, dims = 2)
+```
+
+### mapply
+
+_mapply_ is a multivariate apply of sorts which applies a function in parallel over a set of arguments.
+
+```{R}
+mapply(rep, 1:4, 4:1)
+```
+
+### tapply
+
+_tapply_ is used to apply a function over subsets of a vector. I don't know why it's called _tapply_.
+
+```{R}
+x <- c(rnorm(10), runif(10), rnorm(10, 1))
+f <- gl(3, 10)
+f
+
+tapply(x, f, mean)
+```
+
+### split
+
+_split_ takes a vector or other objects and splits it into groups determined by a factor or list of factors.
+
+```{R}
+x <- c(rnorm(10), runif(10), rnorm(10, 1))
+f <- gl(3,10)
+split(x, f)
+
+s <- split(airquality, airquality$Month)
+lapply(s, function(x) colMeans(x[c("Ozone", "Solar.R", "Wind")], na.rm = TRUE))
+
+```
+

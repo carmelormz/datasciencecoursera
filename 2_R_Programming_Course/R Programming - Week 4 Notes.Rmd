@@ -1,0 +1,111 @@
+---
+title: "R Programming - Week 4"
+author: "Carmelo Ramirez"
+date: "8/10/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The str Function
+
+It is a diagnostic function and an alternative to _summary_. It is especially well suited to compactly display the (abbreviated) contents of (possible nested) lists.
+
+* Roughly one line per basic object.
+
+```{R}
+str(airquality)
+```
+
+### Simulation
+
+Function for probability distributions in R:
+* _rnorm_: generate randon Normal variates with a given mean and standard deviation.
+* _dnorm_: evaluate the Normal probability density (with a given mean/SD) at a point (or vector of points)
+* _pnorm_: evaluate the cumulative distribution function for a Normal distribution.
+* _rpois_: generate random Poisson variates with a given rate.
+
+Probability distribution functions usually have four functions associated with them. The functions are prefixed with a:
+* _d_ for density
+* _r_ for random number generation
+* _p_ for cumulative distribution
+* _q_ for quantile function
+
+```{R}
+x <- rnorm(10)
+x
+
+x <- rnorm(10, 20, 2)
+x
+
+summary(x)
+```
+
+Setting the random number seed with _set.seed_ ensures reproductibility
+
+```{R}
+set.seed(1)
+
+rnorm(5)
+
+rnorm(5)
+
+set.seed(1)
+
+rnorm(5)
+```
+
+Generating Poisson data:
+
+```{R}
+rpois(10,1)
+
+rpois(10, 2)
+
+rpois(10, 20)
+```
+
+## Random Sampling
+
+The _sample_ function draws randomly from a specified set of (scalar) objects allowing you to sample from arbitray distributions.
+
+```{R}
+set.seed(1)
+
+sample(1:10, 4)
+
+sample(1:10, 4)
+
+sample(letters, 5)
+
+sample(1:10)
+
+sample(1:10, replace = TRUE)
+```
+
+## R Profiling
+
+Profiling is a systematic way to examine how much time is spend in different parts of a program.
+
+### Using _system.time()_
+
+* Takes an arbitrary R expression as input (can be wrapped in curly braces) and returns the amount of time taken to evaluate the expression.
+* Computes the time (in seconds) needed to execute an expression
+  * If there's an error, gives time until the error occurred.
+* Returns an object of class _proc_time_
+  * *user time*: time charged to the CPU(s) for this expression
+  * *elapsed time*: "wall clock" time
+  
+### The R Profiler
+
+* The _Rprof()_ function starts the profiler in R
+  * R must be compiled with profiler support (but this is usually the case)
+* The _summaryRprof()_ function summarizes the output from Rprof() (otherwise it's not readable)
+* _Rprof()_ keeps track of the function call stack at regularly sampled intervals and tabulated how much time is spend in each function.
+
+
+
+
+
